@@ -1,3 +1,5 @@
+# 과정 2 - (문제1) "비밀번호 XXXXXX"
+
 import zipfile
 # 시작 시간 출력을 위해.
 import time
