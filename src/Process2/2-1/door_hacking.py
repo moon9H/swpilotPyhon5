@@ -1,11 +1,62 @@
 import zipfile
+# 시작 시간 출력을 위해.
 import time
+
+# 보너스 과제를 위해 사용. (멀티프로세싱 활용)
 import string
 import math
 import multiprocessing
 import sys
 
-# 균등 분할 함수
+def unlock_zip(zip_path="emergency_storage_key.zip"):
+    charset = "abcdefghijklmnopqrstuvwxyz0123456789"
+    total_attempts = 0
+    start_time = time.time()
+
+    try:
+        with zipfile.ZipFile(zip_path) as zf:
+            print(f"[START] 시작 시간: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+            print("암호를 푸는 중입니다...")
+
+            # 반복문: 6자리 비밀번호 생성
+            for a in charset:
+                for b in charset:
+                    for c in charset:
+                        for d in charset:
+                            for e in charset:
+                                for f in charset:
+                                    password = a + b + c + d + e + f
+                                    total_attempts += 1
+                                    try:
+                                        zf.extractall(pwd=bytes(password, 'utf-8'))
+                                        end_time = time.time()
+                                        duration = end_time - start_time
+                                        print(f"\n[성공] 비밀번호: {password}")
+                                        print(f"[시도 횟수] {total_attempts:,}회")
+                                        print(f"[소요 시간] {duration:.2f}초")
+
+                                        with open("password.txt", "w") as f:
+                                            f.write(password)
+                                        return
+                                    except:
+                                        if total_attempts % 100000 == 0:
+                                            elapsed = time.time() - start_time
+                                            print(f"[진행 중] {total_attempts:,}회 시도, {elapsed:.2f}초 경과")
+                                        continue
+
+            print("[실패] 비밀번호를 찾지 못했습니다.")
+
+    except FileNotFoundError:
+        print(f"[오류] '{zip_path}' 파일이 존재하지 않습니다.")
+    except Exception as e:
+        print(f"[예외 발생] {e}")
+
+if __name__ == "__main__":
+    unlock_zip()
+
+# 보너스 문제 (암호를 좀 더 빠르게 해제하는 알고리즘)
+
+# 프로세스에게 균등하게 업무를 부여하기 위해 나누는 함수
 def divide_charset_evenly(charset, num_chunks):
     charset_list = list(charset)
     total = len(charset_list)
