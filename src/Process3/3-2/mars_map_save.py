@@ -1,3 +1,5 @@
+#과정 3 - (문제2) "보물섬"
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
