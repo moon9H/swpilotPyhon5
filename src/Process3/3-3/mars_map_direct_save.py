@@ -81,18 +81,36 @@ def bfs_path(start, goal, obstacles, max_x, max_y, min_x, min_y):
     return []
 
 def bonus_structures_path(home, us_camp, struct_coords, obstacles, max_x, max_y, min_x, min_y):
+    # 방문 가능한 모든 구조물을 방문하고 마지막에 미국 기지에 도달하는 경로
     path = []
     current = home
-    all_points = sorted(struct_coords)  # 좌표순 정렬(임의 순서)
-    all_points.append(us_camp)
-    for target in all_points:
-        seg = bfs_path(current, target, obstacles, max_x, max_y, min_x, min_y)
-        if not seg:
+    unvisited = set(struct_coords)
+    while unvisited:
+        # 현재 위치에서 가장 가까운 구조물 선택 (BFS 거리 기준)
+        min_dist = float('inf')
+        next_struct = None
+        next_seg = []
+        for struct in unvisited:
+            seg = bfs_path(current, struct, obstacles, max_x, max_y, min_x, min_y)
+            if seg and (len(seg) < min_dist):
+                min_dist = len(seg)
+                next_struct = struct
+                next_seg = seg
+        if next_struct is None:
+            # 더 이상 방문 불가 구조물이 남아있으면 종료
             return []
         if path:
-            seg = seg[1:]  # 중복점 제거
-        path.extend(seg)
-        current = target
+            next_seg = next_seg[1:]  # 중복점 제거
+        path.extend(next_seg)
+        current = next_struct
+        unvisited.remove(next_struct)
+    # 마지막으로 미국 기지까지 이동
+    last_seg = bfs_path(current, us_camp, obstacles, max_x, max_y, min_x, min_y)
+    if not last_seg:
+        return []
+    if path:
+        last_seg = last_seg[1:]
+    path.extend(last_seg)
     return path
 
 def main():
