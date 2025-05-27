@@ -52,7 +52,7 @@ def average_logger():
         if not sensor_log:
             with print_lock:
                 print('\n[5분 단위 평균] 데이터 없음\n')
-            return
+            continue
 
         df = pd.DataFrame(sensor_log)
         df['timestamp'] = pd.to_datetime(df['timestamp'])
@@ -61,14 +61,19 @@ def average_logger():
         numeric_cols = ['temperature', 'light', 'humidity']
         resampled = df[numeric_cols].resample('5min').mean().round(2)
 
+        if resampled.empty:
+            with print_lock:
+                print('\n[5분 단위 평균] 유효한 데이터 없음\n')
+            continue
+
+        latest = resampled.tail(1).iloc[0]
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
         with print_lock:
             print(f'\n[누적 데이터의 5분 단위 평균 - {current_time} 기준]')
             print('온도'.rjust(6), '조도'.rjust(10), '습도'.rjust(6))
             print('-' * 30)
-            for row in resampled.itertuples(index=False):
-                print(f'{row.temperature:^6} {row.light:^10} {row.humidity:^6}')
-            print()
+            print(f'{latest["temperature"]:>6} {latest["light"]:>10} {latest["humidity"]:>6}')
 
 def main():
     sensors = [ParmSensor(f'Parm-{i}') for i in range(1, 6)]
