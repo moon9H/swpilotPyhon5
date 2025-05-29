@@ -6,6 +6,7 @@ class Node:
         self.left = None
         self.right = None
 
+# [보너스 과제] - 전체 내용 BinarySearchTree 라는 이름의 클래스로 구성
 class BinarySearchTree:
     def __init__(self):
         self.root = None

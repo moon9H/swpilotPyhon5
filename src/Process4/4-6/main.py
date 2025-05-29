@@ -53,6 +53,7 @@ class LinkedList:
 
         return False  # 삭제 실패
 
+    #[보너스 과제] - 처음부터 끝까지 순차적으로 가져오는 get_list() 함수 추가
     def get_list(self):
         result = []
         current = self.head
