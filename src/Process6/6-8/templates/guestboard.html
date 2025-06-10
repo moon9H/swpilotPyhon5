@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guestboard</title>
+</head>
+<body>
+    <h1>방명록</h1>
+    <form action="/guestboard" method="post">
+        <label for="name">이름:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="content">내용:</label><br>
+        <textarea id="content" name="content" rows="4" cols="50" required></textarea><br><br>
+        <input type="submit" value="제출">
+    </form>
+    <hr>
+    <h2>방명록 내용</h2>
+    <ul>
+        {% for entry in entries %}
+            <li><strong>{{ entry['name'] }}</strong>: {{ entry['content'] }} ({{ entry['time'] }})</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
