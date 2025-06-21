@@ -1,3 +1,5 @@
+# 과정 7 - (문제2) 정확한 To-DO
+
 from fastapi import FastAPI, APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List
