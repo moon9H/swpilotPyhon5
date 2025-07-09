@@ -1,0 +1,5 @@
+# 과정 10 - (문제8) 집으로 가는 길
+scikit-learn
+fastapi
+uvicorn
+joblib
